@@ -22,7 +22,7 @@ function loadFiles(obj)
         % load spikesRaw
         if isfield(res_, 'rawShape')
             obj.hCfg.updateLog('loadRaw', sprintf('Loading %s', obj.hCfg.rawFile), 1, 0);
-            spikesRaw = readBin(obj.hCfg.rawFile, res_.rawShape, '*int16');
+            spikesRaw = jrclust.utils.mmapBin(obj.hCfg.rawFile, res_.rawShape, 'int16');
             obj.hCfg.updateLog('loadRaw', sprintf('Finished loading %s', obj.hCfg.rawFile), 0, 1);
         else
             spikesRaw = [];
@@ -31,7 +31,7 @@ function loadFiles(obj)
         % load spikesFilt
         if isfield(res_, 'filtShape')
             obj.hCfg.updateLog('loadFilt', sprintf('Loading %s', obj.hCfg.filtFile), 1, 0);
-            spikesFilt = readBin(obj.hCfg.filtFile, res_.filtShape, '*int16');
+            spikesFilt = jrclust.utils.mmapBin(obj.hCfg.filtFile, res_.filtShape, 'int16');
             obj.hCfg.updateLog('loadFilt', sprintf('Finished loading %s', obj.hCfg.filtFile), 0, 1);
         else
             spikesFilt = [];
@@ -40,7 +40,7 @@ function loadFiles(obj)
         % load spikeFeatures
         if isfield(res_, 'featuresShape')
             obj.hCfg.updateLog('loadFeatures', sprintf('Loading %s', obj.hCfg.featuresFile), 1, 0);
-            spikeFeatures = readBin(obj.hCfg.featuresFile, res_.featuresShape, '*single');
+            spikeFeatures = jrclust.utils.mmapBin(obj.hCfg.featuresFile, res_.featuresShape, 'single');
             obj.hCfg.updateLog('loadFeatures', sprintf('Finished loading %s', obj.hCfg.featuresFile), 0, 1);
         else
             spikeFeatures = [];

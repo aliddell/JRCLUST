@@ -101,12 +101,8 @@ function res = detect(obj)
     end
 
     % load in spikesRaw, spikesFilt
-    fid = fopen(obj.hCfg.rawFile, 'r');
-    res.spikesRaw = reshape(fread(fid, inf, '*int16'), res.rawShape);
-    fclose(fid);
-    fid = fopen(obj.hCfg.filtFile, 'r');
-    res.spikesFilt = reshape(fread(fid, inf, '*int16'), res.filtShape);
-    fclose(fid);
+    res.spikesRaw = jrclust.utils.mmapBin(obj.hCfg.rawFile, res.rawShape, 'int16');
+    res.spikesFilt = jrclust.utils.mmapBin(obj.hCfg.filtFile, res.filtShape, 'int16');
 
     % compute features from all spikes over all recordings
     if obj.hCfg.getOr('extractAfterDetect', 0) || strcmp(obj.hCfg.clusterFeature, 'gpca')
@@ -152,6 +148,8 @@ function res = detect(obj)
 
     % spike positions
     res.spikePositions = obj.spikePos(res.spikeSites, res.spikeFeatures);
+    
+    res.spikeFeatures = jrclust.utils.mmapBin(obj.hCfg.featuresFile, size(res.spikeFeatures), 'single');
 
     % recordings for inspection
     res.hRecs = hRecs;

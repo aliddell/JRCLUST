@@ -35,7 +35,7 @@ function res = computeDelta(dRes, res, hCfg)
             spikeData.spikes3 = dRes.spikeSites3(dRes.spikeSites3==iSite);
         end
 
-        [siteFeatures, spikes, n1, n2, spikeOrder] = jrclust.features.getSiteFeatures(dRes.spikeFeatures, iSite, spikeData, hCfg);
+        [siteFeatures, spikes, n1, n2, spikeOrder] = jrclust.features.getSiteFeatures(dRes.spikeFeatures.Data.Data, iSite, spikeData, hCfg);
         if hCfg.useGPU
             deltaCK.GridSize = [ceil(n1/chunkSize^2), chunkSize]; % MaxGridSize: [2.1475e+09 65535 65535]
         end

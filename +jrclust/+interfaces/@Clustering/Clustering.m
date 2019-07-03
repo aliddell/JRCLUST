@@ -162,7 +162,7 @@ classdef (Abstract) Clustering < handle
         end
         function sf = get.spikeFeatures(obj)
             if isfield(obj.dRes, 'spikeFeatures')
-                sf = obj.dRes.spikeFeatures;
+                sf = obj.dRes.spikeFeatures.Data.Data;
             else
                 sf = [];
             end
@@ -198,7 +198,7 @@ classdef (Abstract) Clustering < handle
         end
         function sf = get.spikesFilt(obj)
             if isfield(obj.dRes, 'spikesFilt')
-                sf = obj.dRes.spikesFilt;
+                sf = obj.dRes.spikesFilt.Data.Data;
             else
                 sf = [];
             end
@@ -222,7 +222,7 @@ classdef (Abstract) Clustering < handle
         end
         function sr = get.spikesRaw(obj)
             if isfield(obj.dRes, 'spikesRaw')
-                sr = obj.dRes.spikesRaw;
+                sr = obj.dRes.spikesRaw.Data.Data;
             else
                 sr = [];
             end

@@ -43,7 +43,7 @@ function res = computeRho(dRes, res, hCfg)
             spikeData.spikes3 = dRes.spikesBySite3(dRes.spikesBySite3==iSite);
         end
 
-        [siteFeatures, ~, n1, n2, spikeOrder] = jrclust.features.getSiteFeatures(dRes.spikeFeatures, iSite, spikeData, hCfg);
+        [siteFeatures, ~, n1, n2, spikeOrder] = jrclust.features.getSiteFeatures(dRes.spikeFeatures.Data.Data, iSite, spikeData, hCfg);
         if hCfg.useGPU
             rhoCK.GridSize = [ceil(n1/chunkSize^2), chunkSize]; %MaxGridSize: [2.1475e+09 65535 65535]
         end

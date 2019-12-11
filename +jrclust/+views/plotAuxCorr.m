@@ -107,12 +107,24 @@ function [auxSamples, auxTimes] = loadAuxChannel(hCfg)
             auxRate = hCfg.getOr('auxRate', hCfg.sampleRate);
         case {'.dat', '.bin'}
             if isempty(hCfg.auxChan)
-                return;
+                try % ask where it is 
+                    hCfg.auxFile = fullfile(hCfg.outputDir,uigetfile({'*.mat;*.csv'},...
+                    'Select the Trial file',hCfg.outputDir));
+                catch
+                    return;
+                end
             end
-
-            hRec = jrclust.detect.newRecording(hCfg.auxFile, hCfg);
-            auxSamples = single(hRec.readRawROI(hCfg.auxChan, 1:hRec.nSamples))*hCfg.bitScaling*hCfg.auxScale;
-            auxRate = hCfg.getOr('auxRate', hCfg.sampleRate);
+            try
+                hRec = jrclust.detect.newRecording(hCfg.auxFile, hCfg);
+                auxSamples = single(hRec.readRawROI(hCfg.auxChan, 1:hRec.nSamples))*hCfg.bitScaling*hCfg.auxScale;
+                auxRate = hCfg.getOr('auxRate', hCfg.sampleRate);
+            catch % .dat or .bin file, but not from SpikeGLX
+                auxSamples = load(hCfg.auxFile);
+                auxRate = hCfg.getOr('auxRate', hCfg.sampleRate);
+            end
+        case '.csv'
+                auxSamples = load(hCfg.auxFile);
+                auxRate = hCfg.getOr('auxRate', hCfg.sampleRate);
         otherwise
             jrclust.utils.qMsgBox(sprintf('hCfg.auxFile: unsupported file format: %s\n', auxExt));
         return;

@@ -118,9 +118,18 @@ function [auxSamples, auxTimes] = loadAuxChannel(hCfg)
                 hRec = jrclust.detect.newRecording(hCfg.auxFile, hCfg);
                 auxSamples = single(hRec.readRawROI(hCfg.auxChan, 1:hRec.nSamples))*hCfg.bitScaling*hCfg.auxScale;
                 auxRate = hCfg.getOr('auxRate', hCfg.sampleRate);
-            catch % .dat or .bin file, but not from SpikeGLX
-                auxSamples = load(hCfg.auxFile);
-                auxRate = hCfg.getOr('auxRate', hCfg.sampleRate);
+            catch % data not from SpikeGLX
+                auxData = load(hCfg.auxFile);
+                auxDataFields = fieldnames(auxData);
+                auxRateFieldIdx= ~cellfun(@isempty, cellfun(@(fn) strfind(fn,'Rate') |...
+                    strfind(fn,'sampling'), auxDataFields,'UniformOutput', false));
+                if sum(auxRateFieldIdx) %there's a sampling rate field 
+                    auxSamples = auxData.(auxDataFields{~auxRateFieldIdx});
+                    auxRate = auxData.(auxDataFields{auxRateFieldIdx});
+                else %load as usual 
+                    auxSamples = auxData.(auxDataFields{1});
+                    auxRate = hCfg.getOr('auxRate', hCfg.sampleRate);
+                end
             end
         case '.csv'
                 auxSamples = load(hCfg.auxFile);

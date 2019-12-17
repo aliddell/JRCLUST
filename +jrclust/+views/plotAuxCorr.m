@@ -109,7 +109,7 @@ function [auxSamples, auxTimes] = loadAuxChannel(hCfg)
             if isempty(hCfg.auxChan)
                 try % ask where it is 
                     hCfg.auxFile = fullfile(hCfg.outputDir,uigetfile({'*.mat;*.csv'},...
-                    'Select the Trial file',hCfg.outputDir));
+                    'Select the Aux file',hCfg.outputDir));
                 catch
                     return;
                 end
